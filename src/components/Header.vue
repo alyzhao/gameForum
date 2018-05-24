@@ -17,8 +17,8 @@
 				<!-- <router-link class="pur-btn" to="/purchase">{{purchase}}</router-link> -->
 				<!-- <a class="pur-btn" @click="fff()">立即购票</a> -->
 				<!-- <a class="switch">语言<i class="fa fa-sort-desc"></i></a> -->
-				<button class="lang active">注册</button>
-				<button class="lang">登录</button>
+				<button class="lang active" @click="showRegister()">注册</button>
+				<button class="lang" @click="showLogin()">登录</button>
 				<i class="mb-bar fa fa-bars" @click="showMbNav = !showMbNav"></i>
 			</div>
 		</div>
@@ -33,6 +33,18 @@
 				</li>
 			</ul>
 		</div>
+		<div class="register" v-if="showRegisterModal">
+			<h3>注册</h3>
+			<input type="text" placeholder="用户名">
+			<input type="password" style="border-top: none" placeholder="密码">
+			<input type="submit" value="注册" @click="register()">
+		</div>
+		<div class="register" v-if="showLoginModal">
+			<h3>登录</h3>
+			<input type="text" placeholder="用户名">
+			<input type="password" style="border-top: none" placeholder="密码">
+			<input type="submit" value="登录" @click="login()">
+		</div>
 	</div>
 </template>
 <script>
@@ -44,7 +56,9 @@
 		data() {
 			return {
 				showMbNav: false,
-				purchase: '立即购票'
+				purchase: '立即购票',
+				showRegisterModal: false,
+				showLoginModal: false
 			}
 		},
 		mounted: function () {
@@ -58,6 +72,20 @@
 			},
 			loadData() {
 				this.purchase = this.isZh ? '立即购票' : 'Buy Ticket';
+			},
+			showRegister() {
+				this.showLoginModal = false;
+				this.showRegisterModal = true;
+			},
+			showLogin() {
+				this.showRegisterModal = false;
+				this.showLoginModal = false;
+			},
+			register() {
+
+			},
+			login() {
+
 			}
 		},
 		computed: {
@@ -83,6 +111,42 @@
 		transition: all .3s linear;
 		position: relative;
 		z-index: 999;
+		.register {
+			position: fixed;
+			width: 350px;
+			height: 280px;
+			margin-left: -175px;
+			margin-top: -140px;
+			background-color: #fff;
+			box-shadow: 0px 0px 16px 3px #ddd;
+			top: 50%;
+			left: 50%;
+			padding: 15px;
+			h3 {
+				text-align: center;
+				color: #333;
+				padding: 5px 0 18px;
+			}
+			input {
+				width: 100%;
+				height: 50px;
+				line-height: 50px;
+				color: #333333;
+				font-size: 14px;
+				padding-left: 16px;
+				outline: none;
+			    border: 1px solid #ddd;
+			    &[type=submit] {
+			    	margin-top: 20px;
+			    	font-size: 18px;
+			    	color: #fff;
+			    	background-color: #f3c400;
+			    	border: none;
+			    	font-weight: bold;
+			    	cursor: pointer;
+			    }
+			}
+		}
 		.top-nav {
 			height: 80px;
 			width: 1200px; 

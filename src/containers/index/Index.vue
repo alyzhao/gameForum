@@ -123,7 +123,7 @@
         },
         mounted: function () {
             this.$nextTick(function () {
-                this.loadData();
+                // this.loadData();
             })
         },
         methods: {
