@@ -41,14 +41,6 @@
 				staticHost: prodUrl.imgHost
 			}
 		},
-		mounted: function () {
-			this.$nextTick(function () {
-				this.axios.get(prodUrl.HOST + '/2050webOnline/onLinebanner/queryBanner').then(response => {
-					let resData = response.data;
-					this.bannerUrl = resData.imgOne;
-				})
-			})
-		},
 	}
 </script>
 <style lang="scss">

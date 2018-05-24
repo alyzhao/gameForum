@@ -10,18 +10,15 @@
                             <div class="c-in clearfix">
                                 <div class="items" v-for="item in hardWareList" :key="item.id">
                                     <router-link :to="'/hardware/' + item.id">
-                                        <p class="ctt"><a :title="item.gamename">酷睿i5 8500</a></p>
-                                        <p class="ccon"><a :title="item.introduction">酷睿i5 8500是一款性价比极高的配件类产品。由Intel制造，制造工艺精良保证质量和使用寿命，有售后保障且价格公道，是性价比较高的一款选择。</a></p>
+                                        <p class="ctt"><a :title="item.name">{{item.name}}</a></p>
+                                        <p class="ccon"><a :title="item.introduction">{{item.introduction}}</a></p>
                                         <div class="peop">
-                                            <a class="portrait" target="_blank"><img height="60" width="60" src="../../assets/img/hardware.png"/></a>
+                                            <a class="portrait" target="_blank"><img height="60" width="60" :src="staticHost + item.img"/></a>
                                             <div class="productor">
                                                 <div class="info">
-                                                    <p class="cp overh">核心数量：六核</p>
-                                                    <p class="cp overh">接口类型：LGA 1151</p>
-                                                    <p class="cp overh">三级缓存：9M</p>
-                                                    <p class="cp overh">工作功率：65W</p>
+                                                    <p class="cp overh" v-for="(p, index) in item.paramter" :key="index">{{p}}</p>
                                                 </div>
-                                                <p class="price overh"><span>参考价格: </span>￥14999</p>
+                                                <p class="price overh"><span>参考价格: </span>{{item.price}}</p>
                                             </div>
                                         </div>
                                     </router-link>
@@ -47,7 +44,6 @@
     export default {
         data() {
             return {
-                gameList: [],
                 forumBannerList: [{
                     pcBanner: forumPcBanner,
                     mbBanner: forumPcBanner,
@@ -59,9 +55,7 @@
                 size: 6,
                 loadingData: false,
                 loadAll: false,
-                hardWareList: [{
-                    id: 1
-                }]
+                hardWareList: []
             }
         },
         mounted: function () {
@@ -85,13 +79,16 @@
             loadData(page = this.page, size = this.size) {
                 this.loadingData = true;
 
-                this.axios.get(prodUrl.HOST + '/game/queryGameAll/' + page + '/' + size).then(response => {
+                this.axios.get(prodUrl.HOST + '/game/queryHardWareAll/' + page + '/' + size).then(response => {
                     this.loadingData = false;
                     let resData = response.data;
+                    resData.map(item => {
+                        item.paramter = item.paramter.split('#');
+                    })
                     if (resData.length < this.size) {
                         this.loadAll = true;
                     }
-                    this.gameList.push(...resData);
+                    this.hardWareList.push(...resData);
                     this.page = page;
                 })
 

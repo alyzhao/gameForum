@@ -35,22 +35,19 @@
 					<div class="c-in clearfix">
 
                         <div class="items" v-for="item in hardWareList" :key="item.id" @click="goHardWareDetail(item.id)">
-                            <p class="ctt"><a @click="goHardWareDetail(item.id)" :title="item.gamename">酷睿i5 8500</a></p>
-                            <p class="ccon"><a :title="item.introduction">酷睿i5 8500是一款性价比极高的配件类产品。由Intel制造，制造工艺精良保证质量和使用寿命，有售后保障且价格公道，是性价比较高的一款选择。</a></p>
+                            <p class="ctt"><a @click="goHardWareDetail(item.id)">{{item.name}}</a></p>
+                            <p class="ccon"><a>{{item.introduction}}</a></p>
                             <div class="peop">
-                                <a class="portrait" target="_blank"><img height="60" width="60" src="../../assets/img/hardware.png"/></a>
+                                <a class="portrait" target="_blank"><img height="60" width="60" :src="staticHost + item.img"/></a>
                                 <div class="productor">
                                 	<div class="info">
-	                                    <p class="cp overh">核心数量：六核</p>
-	                                    <p class="cp overh">接口类型：LGA 1151</p>
-	                                    <p class="cp overh">三级缓存：9M</p>
-	                                    <p class="cp overh">工作功率：65W</p>
+                                		<p class="cp overh" v-for="(p, index) in item.paramter" :key="index">{{p}}</p>
 	                                </div>
-	                                <p class="price overh"><span>参考价格: </span>￥14999</p>
+	                                <p class="price overh"><span>参考价格: </span>{{item.price}}</p>
                                 </div>
                             </div>
                         </div>
-                        
+
 					</div>
 					<div class="more"><router-link to="/hardware">查看更多</router-link></div>
 				</div>
@@ -121,9 +118,7 @@
                     productcompany: "Capcom",
                 }],
 
-                hardWareList: [{
-                	id: 1
-                }]
+                hardWareList: []
             }
         },
         mounted: function () {
@@ -144,7 +139,15 @@
 
             		this.gameList = resData;
             		console.log(this.gameList);
+            	})
 
+            	this.axios.get(prodUrl.HOST + '/game/queryHardWareAll/1/6').then(response => {
+            		let resData = response.data;
+            		resData.map(item => {
+            			item.paramter = item.paramter.split('#');
+            		})
+            		console.log(resData);
+            		this.hardWareList = resData;
             	})
             },
             goHardWareDetail(id) {
@@ -269,7 +272,7 @@
 					overflow: hidden;
 					.portrait {
 						display: block;
-                        min-width: 60px;
+                        min-width: 100px;
 						overflow: hidden;
 						img {
 							display: block;
