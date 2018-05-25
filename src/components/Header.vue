@@ -17,8 +17,9 @@
 				<!-- <router-link class="pur-btn" to="/purchase">{{purchase}}</router-link> -->
 				<!-- <a class="pur-btn" @click="fff()">立即购票</a> -->
 				<!-- <a class="switch">语言<i class="fa fa-sort-desc"></i></a> -->
-				<button class="lang active" @click="showRegister()">注册</button>
-				<button class="lang" @click="showLogin()">登录</button>
+				<button class="lang active" v-if="!username" @click="showRegister()">注册</button>
+				<button class="lang" v-if="!username" @click="showLogin()">登录</button>
+				<button class="lang active" v-if="username">{{username}}</button>
 				<i class="mb-bar fa fa-bars" @click="showMbNav = !showMbNav"></i>
 			</div>
 		</div>
@@ -34,12 +35,14 @@
 			</ul>
 		</div>
 		<div class="register" v-if="showRegisterModal">
+			<i class="close">x</i>
 			<h3>注册</h3>
 			<input type="text" placeholder="用户名" v-model="registerName">
 			<input type="password" style="border-top: none" placeholder="密码" v-model="registerPwd">
 			<input type="submit" value="注册" @click="register()">
 		</div>
 		<div class="register" v-if="showLoginModal">
+			<i class="close">x</i>
 			<h3>登录</h3>
 			<input type="text" placeholder="用户名" v-model="loginName">
 			<input type="password" style="border-top: none" placeholder="密码" v-model="loginPwd">
@@ -49,10 +52,8 @@
 </template>
 <script>
 	import HeaderLink from 'components/HeaderLink';
-	import { mapState } from 'vuex';
 	import qs from 'qs';
 	const prodUrl = require('constants/config.js').prodUrl;
-
 
 	export default {
 		props: ['logo', 'navLinks'],
@@ -65,7 +66,8 @@
 				registerPwd: null,
 				registerName: null,
 				loginName: null,
-				loginPwd: null
+				loginPwd: null,
+				username: null
 			}
 		},
 		mounted: function () {
@@ -95,6 +97,7 @@
 				})).then(response => {
 					console.log(response.data);
 					if (response.data.code == 1) {
+						this.setCookie('username', this.username, '/')
 						alert('注册成功！');
 					} else {
 						alert(response.data.msg);
@@ -108,23 +111,11 @@
 				})).then(response => {
 					if (response.data == true) {
 						alert('登陆成功');
+						console.log(this.util);
 					} else {
 						alert('用户名或密码错误！');
 					}
 				})
-			}
-		},
-		computed: {
-			isZh() {
-				return this.$store.state.lang == 'zh';
-			},
-			lang() {
-				return this.$store.state.lang;	
-			}
-		},
-		watch: {
-			isZh() {
-				this.loadData();
 			}
 		},
 		components: {
@@ -148,6 +139,14 @@
 			top: 50%;
 			left: 50%;
 			padding: 15px;
+			.close {
+				position: absolute;
+				right: 10px;
+				top: 2px;
+				font-style: normal;
+				color: #666;
+				cursor: pointer;
+			}
 			h3 {
 				text-align: center;
 				color: #333;

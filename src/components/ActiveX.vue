@@ -42,20 +42,6 @@
                                 <div>unslove</div>
                             </div>
                         </div>
-                        <div class="cell clearfix">
-                            <i class="fl cpu fa  fa-volume-up"></i>
-                            <div class="fl info">
-                                <div>声卡</div>
-                                <div>unslove</div>
-                            </div>
-                        </div>
-                        <div class="cell clearfix">
-                            <i class="fl cpu fa fa-wifi"></i>
-                            <div class="fl info">
-                                <div>网卡</div>
-                                <div>unslove</div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

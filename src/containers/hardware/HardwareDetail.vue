@@ -62,14 +62,6 @@
                 })
             }
         },
-        computed: {
-            isZh() {
-                return this.$store.state.lang == 'zh';
-            },
-            content() {
-                return this.isZh ? contentZh : contentEn;
-            }            
-        },
         watch: {
             isZh() {
                 this.loadData();

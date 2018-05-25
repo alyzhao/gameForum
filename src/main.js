@@ -8,7 +8,6 @@ import 'swiper/dist/css/swiper.css';
 
 import 'babel-polyfill'
 
-import store from './vuex';
 import axios from 'axios';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
@@ -17,6 +16,9 @@ Vue.prototype.axios = axios;
 Vue.use(VueAwesomeSwiper);
 
 import ActiveX from 'components/ActiveX';
+import util from './utils/util';
+
+Vue.use(util);
 
 Vue.component('ActiveX', ActiveX);
 
@@ -29,6 +31,5 @@ new Vue({
   el: '#app',
   template: '<App/>',
   router,
-  store,
   components: { App }
 })

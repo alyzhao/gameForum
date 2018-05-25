@@ -112,14 +112,6 @@
                 })              
             }
         },
-        computed: {
-            isZh() {
-                return this.$store.state.lang == 'zh';
-            },
-            content() {
-                return this.isZh ? contentZh : contentEn;
-            }            
-        },
         watch: {
             isZh() {
                 this.loadData();
@@ -199,6 +191,7 @@
                         .com {
                             width: 370px;
                             display: flex;
+                            margin-bottom: 15px;
                             padding: 15px;
                             border-radius: 5px;
                             border: 1px solid #ddd;
