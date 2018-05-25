@@ -157,8 +157,9 @@
                 for (var mi = 0; mi < mem.length; mi++){  
                     memDX += mem[mi].cap;
                 }
-
                 hardware.Ram = memDX / 1024;
+
+                // 硬盘
 
                 return hardware;
             },

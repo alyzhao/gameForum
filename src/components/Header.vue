@@ -35,14 +35,14 @@
 		</div>
 		<div class="register" v-if="showRegisterModal">
 			<h3>注册</h3>
-			<input type="text" placeholder="用户名">
-			<input type="password" style="border-top: none" placeholder="密码">
+			<input type="text" placeholder="用户名" v-model="registerName">
+			<input type="password" style="border-top: none" placeholder="密码" v-model="registerPwd">
 			<input type="submit" value="注册" @click="register()">
 		</div>
 		<div class="register" v-if="showLoginModal">
 			<h3>登录</h3>
-			<input type="text" placeholder="用户名">
-			<input type="password" style="border-top: none" placeholder="密码">
+			<input type="text" placeholder="用户名" v-model="loginName">
+			<input type="password" style="border-top: none" placeholder="密码" v-model="loginPwd">
 			<input type="submit" value="登录" @click="login()">
 		</div>
 	</div>
@@ -50,6 +50,9 @@
 <script>
 	import HeaderLink from 'components/HeaderLink';
 	import { mapState } from 'vuex';
+	import qs from 'qs';
+	const prodUrl = require('constants/config.js').prodUrl;
+
 
 	export default {
 		props: ['logo', 'navLinks'],
@@ -58,7 +61,11 @@
 				showMbNav: false,
 				purchase: '立即购票',
 				showRegisterModal: false,
-				showLoginModal: false
+				showLoginModal: false,
+				registerPwd: null,
+				registerName: null,
+				loginName: null,
+				loginPwd: null
 			}
 		},
 		mounted: function () {
@@ -79,13 +86,32 @@
 			},
 			showLogin() {
 				this.showRegisterModal = false;
-				this.showLoginModal = false;
+				this.showLoginModal = true;
 			},
 			register() {
-
+				this.axios.post(prodUrl.HOST + '/user/register', qs.stringify({
+					username: this.registerName,
+					password: this.registerPwd
+				})).then(response => {
+					console.log(response.data);
+					if (response.data.code == 1) {
+						alert('注册成功！');
+					} else {
+						alert(response.data.msg);
+					}
+				})
 			},
 			login() {
-
+				this.axios.post(prodUrl.HOST + '/user/login', qs.stringify({
+					username: this.registerName,
+					password: this.registerPwd
+				})).then(response => {
+					if (response.data == true) {
+						alert('登陆成功');
+					} else {
+						alert('用户名或密码错误！');
+					}
+				})
 			}
 		},
 		computed: {
