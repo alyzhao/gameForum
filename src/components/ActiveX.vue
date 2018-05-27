@@ -3,7 +3,7 @@
         <div class="content">
             <div class="activex-con" v-if="supportActiveX">
                 <div class="fl">
-                    <div class="activex-wrap" ref="activex"></div>
+                    <div class="activex-wrap" ref="activex">A</div>
                 </div>
                 <div class="fr">
                     <div class="hardware clearfix">
@@ -35,13 +35,6 @@
                                 <div>{{hardware.VideoController}}</div>
                             </div>
                         </div>
-                        <div class="cell clearfix">
-                            <i class="fl fa fa-hdd-o"></i>
-                            <div class="fl info">
-                                <div>主硬盘</div>
-                                <div>unslove</div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -64,7 +57,7 @@
             }
         },
         mounted() {
-            this.chartsInit(800);
+            // this.chartsInit(800);
 
             try {
                 let locator = new ActiveXObject("WbemScripting.SWbemLocator");
@@ -171,6 +164,8 @@
         .activex-wrap {
             width: 500px;
             height: 730px;
+            text-align: center;
+            line-height: 730px;
         }
         .no-support {
             color: #fff;

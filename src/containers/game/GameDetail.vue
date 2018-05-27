@@ -18,6 +18,10 @@
                     </div>
                 </div>
             </div>
+            <div class="comment-wrap">
+                <textarea v-model="commentContent"></textarea>
+                <input type="submit" class="submit-comment">
+            </div>
         </div>
         <div class="right">
             <div>
@@ -93,7 +97,8 @@
                     gameCategory: "动作游戏ACT",
                     gameCompany: "Capcom",
                 },
-                commentList: []
+                commentList: [],
+                commentContent: null
             }
         },
         mounted: function() {
@@ -170,6 +175,22 @@
                         text-align: left;
                         padding-left: 85px;
                     }
+                }
+            }
+            .comment-wrap {
+                padding: 20px;
+                textarea {
+                    width: 100%;
+                    height: 150px;
+                }
+                .submit-comment {
+                    margin-top: 20px;
+                    font-size: 18px;
+                    color: #fff;
+                    background-color: #f3c400;
+                    border: none;
+                    font-weight: bold;
+                    cursor: pointer;
                 }
             }
         }

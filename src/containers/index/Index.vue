@@ -68,55 +68,7 @@
         data() {
             return {
                 staticHost: prodUrl.staticHost,
-                gameList: [{
-                    id: 0,
-                    gamename: "怪物猎人世界",
-                    introduction: "《怪物猎人世界（Monster Hunter World）》作为一个无缝连接的开放世界游戏，本作将拥有原汁原味的怪猎水平，游戏将有传统的单人模式，以及联机合作模式。",
-                    gameimg: "game1.png",
-                    language: "英文",
-                    gamecategory: "动作游戏ACT",
-                    productcompany: "Capcom",
-                }, {
-                    id: 0,
-                    gamename: "怪物猎人世界",
-                    introduction: "《怪物猎人世界（Monster Hunter World）》作为一个无缝连接的开放世界游戏，本作将拥有原汁原味的怪猎水平，游戏将有传统的单人模式，以及联机合作模式。",
-                    gameimg: "game1.png",
-                    language: "英文",
-                    gamecategory: "动作游戏ACT",
-                    productcompany: "Capcom",
-                }, {
-                    id: 0,
-                    gamename: "怪物猎人世界",
-                    introduction: "《怪物猎人世界（Monster Hunter World）》作为一个无缝连接的开放世界游戏，本作将拥有原汁原味的怪猎水平，游戏将有传统的单人模式，以及联机合作模式。",
-                    gameimg: "game1.png",
-                    language: "英文",
-                    gamecategory: "动作游戏ACT",
-                    productcompany: "Capcom",
-                }, {
-                    id: 0,
-                    gamename: "怪物猎人世界",
-                    introduction: "《怪物猎人世界（Monster Hunter World）》作为一个无缝连接的开放世界游戏，本作将拥有原汁原味的怪猎水平，游戏将有传统的单人模式，以及联机合作模式。",
-                    gameimg: "game1.png",
-                    language: "英文",
-                    gamecategory: "动作游戏ACT",
-                    productcompany: "Capcom",
-                }, {
-                    id: 0,
-                    gamename: "怪物猎人世界",
-                    introduction: "《怪物猎人世界（Monster Hunter World）》作为一个无缝连接的开放世界游戏，本作将拥有原汁原味的怪猎水平，游戏将有传统的单人模式，以及联机合作模式。",
-                    gameimg: "game1.png",
-                    language: "英文",
-                    gamecategory: "动作游戏ACT",
-                    productcompany: "Capcom",
-                }, {
-                    id: 0,
-                    gamename: "怪物猎人世界",
-                    introduction: "《怪物猎人世界（Monster Hunter World）》作为一个无缝连接的开放世界游戏，本作将拥有原汁原味的怪猎水平，游戏将有传统的单人模式，以及联机合作模式。",
-                    gameimg: "game1.png",
-                    language: "英文",
-                    gamecategory: "动作游戏ACT",
-                    productcompany: "Capcom",
-                }],
+                gameList: [],
 
                 hardWareList: []
             }

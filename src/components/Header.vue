@@ -19,7 +19,7 @@
 				<!-- <a class="switch">语言<i class="fa fa-sort-desc"></i></a> -->
 				<button class="lang active" v-if="!username" @click="showRegister()">注册</button>
 				<button class="lang" v-if="!username" @click="showLogin()">登录</button>
-				<button class="lang active" v-if="username">{{username}}</button>
+				<button class="lang active" v-if="username">欢迎, {{username}}</button>
 				<i class="mb-bar fa fa-bars" @click="showMbNav = !showMbNav"></i>
 			</div>
 		</div>
@@ -35,14 +35,14 @@
 			</ul>
 		</div>
 		<div class="register" v-if="showRegisterModal">
-			<i class="close">x</i>
+			<i class="close" @click="closeModal()">x</i>
 			<h3>注册</h3>
 			<input type="text" placeholder="用户名" v-model="registerName">
 			<input type="password" style="border-top: none" placeholder="密码" v-model="registerPwd">
 			<input type="submit" value="注册" @click="register()">
 		</div>
 		<div class="register" v-if="showLoginModal">
-			<i class="close">x</i>
+			<i class="close" @click="closeModal()">x</i>
 			<h3>登录</h3>
 			<input type="text" placeholder="用户名" v-model="loginName">
 			<input type="password" style="border-top: none" placeholder="密码" v-model="loginPwd">
@@ -73,6 +73,7 @@
 		mounted: function () {
             this.$nextTick(function () {
                 this.loadData();
+
             })
         },
 		methods: {
@@ -80,7 +81,9 @@
 				this.$store.dispatch('SET_LANG', val);
 			},
 			loadData() {
-				this.purchase = this.isZh ? '立即购票' : 'Buy Ticket';
+				if (this.getCookie('username') !== null) {
+					this.username = this.getCookie('username');
+				}
 			},
 			showRegister() {
 				this.showLoginModal = false;
@@ -97,7 +100,6 @@
 				})).then(response => {
 					console.log(response.data);
 					if (response.data.code == 1) {
-						this.setCookie('username', this.username, '/')
 						alert('注册成功！');
 					} else {
 						alert(response.data.msg);
@@ -106,16 +108,22 @@
 			},
 			login() {
 				this.axios.post(prodUrl.HOST + '/user/login', qs.stringify({
-					username: this.registerName,
-					password: this.registerPwd
+					username: this.loginName,
+					password: this.loginPwd
 				})).then(response => {
 					if (response.data == true) {
 						alert('登陆成功');
+						this.setCookie('username', this.loginName, '/')
+						this.username = this.loginName;
 						console.log(this.util);
 					} else {
 						alert('用户名或密码错误！');
 					}
 				})
+			},
+			closeModal() {
+				this.showRegisterModal = false;
+				this.showLoginModal = false;
 			}
 		},
 		components: {
