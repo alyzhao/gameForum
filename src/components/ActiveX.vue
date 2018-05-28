@@ -1,9 +1,10 @@
 <template>
     <div class="activex">
         <div class="content">
-            <div class="activex-con" v-if="supportActiveX">
+            <div class="activex-con" v-if="true">
                 <div class="fl">
-                    <div class="activex-wrap" ref="activex">A</div>
+                    <div class="activex-wrap" ref="activex"></div>
+                    <div class="rank">综合评分：<span class="letter">A</span></div>
                 </div>
                 <div class="fr">
                     <div class="hardware clearfix">
@@ -48,6 +49,8 @@
     import echarts from 'echarts';
     import { activexChartsOption } from 'constants/activexChartsOption';
     import { cloneDeep } from 'lodash';
+    import { waterfall } from 'async/waterfall';
+    import { prodUrl } from 'constants/config';
 
     export default {
         data() {
@@ -57,7 +60,7 @@
             }
         },
         mounted() {
-            // this.chartsInit(800);
+            this.chartsInit(800);
 
             try {
                 let locator = new ActiveXObject("WbemScripting.SWbemLocator");
@@ -70,6 +73,35 @@
             if (this.supportActiveX) {
                 console.log(this.getHardwareInfo());
                 this.hardware = this.getHardwareInfo();
+
+                waterfall([
+                    (cb) => {
+                        this.axios.get(prodUrl.HOST + '/game/queryHardWareRank/' + '赛扬G550').then(response => {
+                            if (response.data == '') {
+                                cb('nodata');
+                            } else {
+                                console.log(response.data);
+                                cd(null, {rankCpu: response.data})
+                            }
+                        })
+                    },
+                    (result, cb) => {
+                        let rank = result;
+                        this.axios.get(prodUrl.HOST + '/game/queryHardWareRank/' + this.hardware.VideoController).then(response => {
+                            if (response.data == '') {
+                                cb('nodata');
+                            } else {
+                                console.log(response.data);
+                                rank.rankVideoController = response.data;
+                                cb(null, rank)
+                            }
+                        })
+                    }
+                ], (error, result) => {
+                    if (result.data == 'nodata') {
+                        alert('信息不足, 无法评分!');
+                    }
+                })
             }
 
         },
@@ -163,9 +195,14 @@
         }
         .activex-wrap {
             width: 500px;
-            height: 730px;
+            height: 600px;
             text-align: center;
             line-height: 730px;
+        }
+        .rank {
+            font-size: 24px;
+            text-align: center;
+            margin-top: -80px;
         }
         .no-support {
             color: #fff;
