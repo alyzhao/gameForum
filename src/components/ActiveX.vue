@@ -4,7 +4,7 @@
             <div class="activex-con" v-if="true">
                 <div class="fl">
                     <div class="activex-wrap" ref="activex"></div>
-                    <div class="rank">综合评分：<span class="letter">A</span></div>
+                    <div class="rank">综合评分：<span class="letter">{{rank}}</span></div>
                 </div>
                 <div class="fr">
                     <div class="hardware clearfix">
@@ -33,7 +33,7 @@
                             <i class="fl raw fa fa-newspaper-o"></i>
                             <div class="fl info">
                                 <div>显卡</div>
-                                <div>{{hardware.VideoController}}</div>
+                                <div>{{hardware.VideoController.join(' + ')}}</div>
                             </div>
                         </div>
                     </div>
@@ -49,18 +49,22 @@
     import echarts from 'echarts';
     import { activexChartsOption } from 'constants/activexChartsOption';
     import { cloneDeep } from 'lodash';
-    import { waterfall } from 'async/waterfall';
+    import { waterfall } from 'async';
     import { prodUrl } from 'constants/config';
 
     export default {
         data() {
             return {
                 supportActiveX: true,
-                hardware: {}
+                hardware: {
+                    CPU: '赛扬G550',
+                    Ram: 8,
+                    VideoController: ['TitanV']
+                },
+                rank: null
             }
         },
         mounted() {
-            this.chartsInit(800);
 
             try {
                 let locator = new ActiveXObject("WbemScripting.SWbemLocator");
@@ -76,30 +80,60 @@
 
                 waterfall([
                     (cb) => {
-                        this.axios.get(prodUrl.HOST + '/game/queryHardWareRank/' + '赛扬G550').then(response => {
+                        this.axios.get(prodUrl.HOST + '/game/queryHardWareRank/' + this.hardware.CPU).then(response => {
                             if (response.data == '') {
                                 cb('nodata');
                             } else {
                                 console.log(response.data);
-                                cd(null, {rankCpu: response.data})
+                                cb(null, {rankCpu: response.data})
                             }
                         })
                     },
                     (result, cb) => {
+                        console.log(result)
                         let rank = result;
-                        this.axios.get(prodUrl.HOST + '/game/queryHardWareRank/' + this.hardware.VideoController).then(response => {
+                        this.axios.get(prodUrl.HOST + '/game/queryHardWareRank/' + this.hardware.VideoController[0]).then(response => {
                             if (response.data == '') {
                                 cb('nodata');
                             } else {
                                 console.log(response.data);
                                 rank.rankVideoController = response.data;
+                                console.log(rank);
                                 cb(null, rank)
                             }
                         })
                     }
                 ], (error, result) => {
-                    if (result.data == 'nodata') {
+                    if (error) {
+                        console.log(error);
                         alert('信息不足, 无法评分!');
+                        return;
+                    } else {
+                        console.log(result)
+                        let fCPU = this.getFraction(result.rankCpu);
+                        let fVideo = this.getFraction(result.rankVideoController);
+                        let fRam = null;
+                        let ram = this.hardware.Ram;
+                        if (ram <= 8) {
+                            fRam = 90;
+                        } else if (ram <= 16) {
+                            fRam = 180;
+                        } else if (ram <= 32) {
+                            fRam = 225;
+                        } else {
+                            fRam = 270;
+                        }
+                        let fAll = fCPU + fVideo + fRam;
+                        if (fAll >= 810) {
+                            this.rank = 'A';
+                        } else if (fAll >= 675) {
+                            this.rank = 'B';
+                        } else if (fAll >= 540) {
+                            this.rank = 'C';
+                        } else {
+                            this.rank = 'D';
+                        }
+                        this.chartsInit(fAll);
                     }
                 })
             }
@@ -151,7 +185,7 @@
                     video[i] = e_VideoController.item().Caption;
                     i++;
                 }
-                hardware.VideoController = video.join(' + ');
+                hardware.VideoController = video;
 
                 // 内存
                 let system = new Enumerator (service.ExecQuery("SELECT * FROM Win32_ComputerSystem")).item();
@@ -182,7 +216,24 @@
                     return p.Product;
                 }
             },
-
+            getFraction(rank) {
+                let f = null;
+                switch(rank) {
+                    case 'A':
+                        f = 270;
+                        break;
+                    case 'B':
+                        f = 225;
+                        break;
+                    case 'C':
+                        f = 180;
+                        break;
+                    case 'D':
+                        f = 90;
+                        break;
+                }
+                return f;
+            }
         }
     }
 </script>
@@ -201,6 +252,7 @@
         }
         .rank {
             font-size: 24px;
+            color: #fff;
             text-align: center;
             margin-top: -80px;
         }
