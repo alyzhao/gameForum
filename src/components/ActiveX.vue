@@ -1,7 +1,7 @@
 <template>
     <div class="activex">
         <div class="content">
-            <div class="activex-con" v-if="true">
+            <div class="activex-con" v-if="supportActiveX">
                 <div class="fl">
                     <div class="activex-wrap" ref="activex"></div>
                     <div class="rank">综合评分：<span class="letter">{{rank}}</span></div>
@@ -80,7 +80,11 @@
 
                 waterfall([
                     (cb) => {
-                        this.axios.get(prodUrl.HOST + '/game/queryHardWareRank/' + this.hardware.CPU).then(response => {
+                        let cup = this.hardware.CPU
+                        if (cpu.split('@').length > 0) {
+                            cup = cpu.split('@')[0]
+                        }
+                        this.axios.get(prodUrl.HOST + '/game/queryHardWareRank/' + cup).then(response => {
                             if (response.data == '') {
                                 cb('nodata');
                             } else {

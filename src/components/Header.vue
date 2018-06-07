@@ -67,7 +67,7 @@
 				registerName: null,
 				loginName: null,
 				loginPwd: null,
-				username: null
+				username: ''
 			}
 		},
 		mounted: function () {
@@ -81,7 +81,8 @@
 				this.$store.dispatch('SET_LANG', val);
 			},
 			loadData() {
-				if (this.getCookie('username') !== null) {
+				console.log(this.getCookie('username'))
+				if (this.getCookie('username') != 'null') {
 					this.username = this.getCookie('username');
 				}
 			},
