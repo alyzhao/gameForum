@@ -20,7 +20,7 @@
             </div>
             <div class="comment-wrap">
                 <textarea v-model="commentContent"></textarea>
-                <input type="submit" class="submit-comment">
+                <input type="submit" @click="comment" class="submit-comment">
             </div>
         </div>
         <div class="right">
@@ -61,7 +61,7 @@
                         <div class="comment">
                             <div class="com" v-for="comment in commentList">
                                 <div class="user">
-                                    <img :src="'http://127.0.0.1:3000/' + 'header.png'">
+                                    <img :src="'http://127.0.0.1:3003/public/images/' + 'header.png'">
                                     <span>{{comment.name}}</span>
                                 </div>
                                 <div class="com-con">
@@ -115,13 +115,27 @@
                     let resData = response.data;
                     this.commentList = resData;
                 })              
+            },
+            comment() {
+
+                if (this.getCookie('username') == 'null') {
+                    alert('请登录后再评论');
+                    return;
+                }
+                if (this.commentContent == null || this.commentContent == '') {
+                    alert('请输入评论内容')
+                    return
+                }
+                this.axios.post(prodUrl.HOST + '/game/insertComment', qs.stringify({
+                    userId: this.getCookie('userid'),
+                    comment: this.commentContent,
+                    gameId: this.gameId
+                })).then(res => {
+                    console.log(res.data)
+                    this.loadData()
+                })
             }
-        },
-        watch: {
-            isZh() {
-                this.loadData();
-            }
-        }        
+        }      
     }
 </script>
 <style lang="scss">

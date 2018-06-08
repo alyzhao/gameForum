@@ -58,7 +58,6 @@
 </template>
 
 <script>
-    // import { prodUrl } from 'constants/config.js';
 
     import qs from 'qs';
 

@@ -102,6 +102,7 @@
 					console.log(response.data);
 					if (response.data.code == 1) {
 						alert('注册成功！');
+						this.closeModal();
 					} else {
 						alert(response.data.msg);
 					}
@@ -112,11 +113,11 @@
 					username: this.loginName,
 					password: this.loginPwd
 				})).then(response => {
-					if (response.data == true) {
+					if (response.data != false) {
 						alert('登陆成功');
 						this.setCookie('username', this.loginName, '/')
 						this.username = this.loginName;
-						console.log(this.util);
+						this.setCookie('userid', response.data)
 					} else {
 						alert('用户名或密码错误！');
 					}
