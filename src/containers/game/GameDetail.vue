@@ -132,6 +132,7 @@
                     gameId: this.gameId
                 })).then(res => {
                     console.log(res.data)
+                    alert('评论成功!')
                     this.loadData()
                 })
             }
