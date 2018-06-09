@@ -20,6 +20,7 @@
             </div>
             <div class="comment-wrap">
                 <textarea v-model="commentContent"></textarea>
+                <input type="text" placeholder="请填写游戏评分, 1~10!" v-model="gameMark" style="display: block;width: 100%;padding: 3px 5px;font-size: 14px;outline: none;">
                 <input type="submit" @click="comment" class="submit-comment">
             </div>
         </div>
@@ -29,6 +30,10 @@
                 <div>
                     <h3>游戏介绍</h3>
                     <p>{{gameInfo.introduction}}</p>
+                </div>
+                <div>
+                    <h3>游戏评分</h3>
+                    <p><span style="font-family: Georgia,serif;color: #FF6633;font-size: 36px;">{{gameAverageMark}}</span></p>
                 </div>
                 <div>
                     <h3>最低配置</h3>
@@ -98,12 +103,21 @@
                     gameCompany: "Capcom",
                 },
                 commentList: [],
-                commentContent: null
+                commentContent: null,
+                gameAverageMark: '暂无评分',
+                gameMark: null
             }
         },
         mounted: function() {
             console.log(this.gameId);
             this.loadData();
+            let gameMark = localStorage.getItem("gameMark" + this.gameId)
+            if (gameMark == null) {
+                this.gameAverageMark == 暂无评分
+            } else {
+                this.gameAverageMark = gameMark
+            }
+            console.log(gameMark);
         },
         methods: {
             loadData() {
@@ -114,7 +128,13 @@
                 this.axios.get(prodUrl.HOST + '/game/queryCommentById/' + this.gameId).then(response => {
                     let resData = response.data;
                     this.commentList = resData;
-                })              
+                })
+                let gameMark = localStorage.getItem("gameMark" + this.gameId)
+                if (gameMark == null) {
+                    this.gameAverageMark == 暂无评分
+                } else {
+                    this.gameAverageMark = gameMark
+                }
             },
             comment() {
 
@@ -125,6 +145,20 @@
                 if (this.commentContent == null || this.commentContent == '') {
                     alert('请输入评论内容')
                     return
+                }
+                if (this.gameMark == null || this.gameMark == '') {
+                    alert('请输入游戏评分')
+                    return
+                }
+                if (parseInt(this.gameMark) > 10 || parseInt(this.gameMark) < 0) {
+                    alert('请输入0~10以内的评分')
+                    return 
+                }
+                let gameMark = localStorage.getItem("gameMark" + this.gameId)
+                if (gameMark == null) {
+                    localStorage.setItem("gameMark" + this.gameId, this.gameMark)
+                } else {
+                    localStorage.setItem("gameMark" + this.gameId, Math.round((parseInt(gameMark) + parseInt(this.gameMark)) / 2))
                 }
                 this.axios.post(prodUrl.HOST + '/game/insertComment', qs.stringify({
                     userId: this.getCookie('userid'),
